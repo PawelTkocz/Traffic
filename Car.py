@@ -43,8 +43,42 @@ class Car:
     def turn(self, angle, dir):
         self.wheels.turn(angle, dir)
 
+    def draw_lights(self, screen):
+        light_left_pts = [[0, 0] for i in range(4)]
+        light_right_pts = [[0, 0] for i in range(4)]
+        height_vec = orthogonal_vector(self.front_left, self.front_right, 10, 1, self.width)
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, 30, 1, self.height)   
+        light_left_pts[0] = self.front_left
+        add_vector_to_point(self.front_left, height_vec, light_left_pts[1])
+        add_vector_to_point(light_left_pts[1], width_vec, light_left_pts[2])
+        add_vector_to_point(self.front_left, width_vec, light_left_pts[3])
+
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, 30, -1, self.height)   
+        light_right_pts[0] = self.front_right
+        add_vector_to_point(self.front_right, height_vec, light_right_pts[1])
+        add_vector_to_point(light_right_pts[1], width_vec, light_right_pts[2])
+        add_vector_to_point(self.front_right, width_vec, light_right_pts[3])
+        
+        pygame.draw.polygon(screen, "yellow", light_left_pts)
+        pygame.draw.polygon(screen, "yellow", light_right_pts)
+    
+    def draw_window(self, screen):
+        height_vec = orthogonal_vector(self.front_left, self.front_right, self.height / 4, 1, self.width)
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width, 1, self.height)
+        window_pts = [[0, 0] for i in range(4)]
+        window_pts[0] = self.front_left
+        add_vector_to_point(self.front_left, height_vec, window_pts[1])
+        add_vector_to_point(self.front_right, height_vec, window_pts[2])
+        window_pts[3] = self.front_right
+        
+        pygame.draw.polygon(screen, "lightblue", window_pts)
+
     def draw(self, screen):
-        pygame.draw.polygon(screen, "black", self.corners)
+        pygame.draw.polygon(screen, "orange", self.corners)
+        pygame.draw.polygon(screen, "black", self.corners, 3)
+        self.draw_lights(screen)
+
+        #self.draw_window(screen)
 
     def find_left_corners(self):
         ort_vec = orthogonal_vector(self.rear_right, self.front_right, self.width, -1, vec_len=self.height)
@@ -62,6 +96,7 @@ class Car:
         self.direction[1] = vec[1] / self.height
 
     def move(self):
+        #policzyc czy to dziala tez dla ruchu w tyl
         movement_dir = self.wheels.cur_movement_direction(self.direction) 
         if self.wheels.is_turn_right():
             move_point(self.front_right, movement_dir, self.vel)
