@@ -46,39 +46,137 @@ class Car:
     def draw_lights(self, screen):
         light_left_pts = [[0, 0] for i in range(4)]
         light_right_pts = [[0, 0] for i in range(4)]
-        height_vec = orthogonal_vector(self.front_left, self.front_right, 10, 1, self.width)
-        width_vec = orthogonal_vector(self.rear_left, self.front_left, 30, 1, self.height)   
+        height_vec = orthogonal_vector(self.front_left, self.front_right, self.height // 15, 1, self.width)
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width // 4, 1, self.height)   
         light_left_pts[0] = self.front_left
         add_vector_to_point(self.front_left, height_vec, light_left_pts[1])
         add_vector_to_point(light_left_pts[1], width_vec, light_left_pts[2])
         add_vector_to_point(self.front_left, width_vec, light_left_pts[3])
 
-        width_vec = orthogonal_vector(self.rear_left, self.front_left, 30, -1, self.height)   
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width // 4, -1, self.height)   
         light_right_pts[0] = self.front_right
         add_vector_to_point(self.front_right, height_vec, light_right_pts[1])
         add_vector_to_point(light_right_pts[1], width_vec, light_right_pts[2])
         add_vector_to_point(self.front_right, width_vec, light_right_pts[3])
-        
+
         pygame.draw.polygon(screen, "yellow", light_left_pts)
         pygame.draw.polygon(screen, "yellow", light_right_pts)
     
-    def draw_window(self, screen):
-        height_vec = orthogonal_vector(self.front_left, self.front_right, self.height / 4, 1, self.width)
-        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width, 1, self.height)
-        window_pts = [[0, 0] for i in range(4)]
-        window_pts[0] = self.front_left
-        add_vector_to_point(self.front_left, height_vec, window_pts[1])
-        add_vector_to_point(self.front_right, height_vec, window_pts[2])
-        window_pts[3] = self.front_right
-        
-        pygame.draw.polygon(screen, "lightblue", window_pts)
+    def draw_wing_mirrors(self, screen):
+        mirror_left_pts = [[0, 0] for i in range(4)]
+        mirror_right_pts = [[0, 0] for i in range(4)]
+
+        height_vec = orthogonal_vector(self.front_left, self.front_right, self.height // 4, 1, self.width)      
+        add_vector_to_point(self.front_left, height_vec, mirror_left_pts[0])
+        add_vector_to_point(self.front_right, height_vec, mirror_right_pts[0])
+
+        height_vec = orthogonal_vector(self.front_left, self.front_right, self.height // 20, 1, self.width)
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width // 8, -1, self.height)   
+
+        add_vector_to_point(mirror_left_pts[0], height_vec, mirror_left_pts[1])
+        add_vector_to_point(mirror_left_pts[1], width_vec, mirror_left_pts[2])
+        add_vector_to_point(mirror_left_pts[0], width_vec, mirror_left_pts[3])
+
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width // 8, 1, self.height) 
+        add_vector_to_point(mirror_right_pts[0], height_vec, mirror_right_pts[1])
+        add_vector_to_point(mirror_right_pts[1], width_vec, mirror_right_pts[2])
+        add_vector_to_point(mirror_right_pts[0], width_vec, mirror_right_pts[3])
+
+        pygame.draw.polygon(screen, "black", mirror_left_pts)
+        pygame.draw.polygon(screen, "black", mirror_right_pts)        
+
+    def draw_front_window(self, screen):
+        pts = [[0, 0] for i in range(4)]
+         
+        height_vec = orthogonal_vector(self.front_left, self.front_right, self.height * 4 // 15, 1, self.width)
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width / 8, 1, self.height)         
+        add_vector_to_point(self.front_left, height_vec, pts[0])
+        add_vector_to_point(pts[0], width_vec, pts[0])
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width * 0.75, 1, self.height) 
+        add_vector_to_point(pts[0], width_vec, pts[1])
+
+        height_vec = orthogonal_vector(self.front_left, self.front_right, self.height // 7, 1, self.width)
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width / 8, 1, self.height) 
+        add_vector_to_point(pts[0], width_vec, pts[3])
+        add_vector_to_point(pts[3], height_vec, pts[3])
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width // 2, 1, self.height)
+        add_vector_to_point(pts[3], width_vec, pts[2])
+        pygame.draw.polygon(screen, "black", pts)
+
+    def draw_side_windows(self, screen):
+        pts_left = [[0, 0] for i in range(4)]
+        pts_right = [[0, 0] for i in range(4)]
+
+        height_vec = orthogonal_vector(self.front_left, self.front_right, self.height * 0.4, 1, self.width)
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width / 8, 1, self.height)         
+        add_vector_to_point(self.front_left, height_vec, pts_left[0])
+        add_vector_to_point(pts_left[0], width_vec, pts_left[0])
+
+        add_vector_to_point(self.front_right, height_vec, pts_right[0])
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width / 8, -1, self.height)
+        add_vector_to_point(pts_right[0], width_vec, pts_right[0])
+
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width / 8, 1, self.height) 
+        height_vec = orthogonal_vector(self.front_left, self.front_right, self.height / 15, 1, self.width)
+        add_vector_to_point(pts_left[0], width_vec, pts_left[1])
+        add_vector_to_point(pts_left[1], height_vec, pts_left[1])
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width / 8, -1, self.height) 
+        add_vector_to_point(pts_right[0], width_vec, pts_right[1])
+        add_vector_to_point(pts_right[1], height_vec, pts_right[1])        
+
+        height_vec = orthogonal_vector(self.front_left, self.front_right, self.height * 4 / 15, 1, self.width)
+        add_vector_to_point(pts_left[1], height_vec, pts_left[2])
+        add_vector_to_point(pts_right[1], height_vec, pts_right[2])
+
+        height_vec = orthogonal_vector(self.front_left, self.front_right, self.height * 6 / 15, 1, self.width)
+        add_vector_to_point(pts_left[0], height_vec, pts_left[3])
+        add_vector_to_point(pts_right[0], height_vec, pts_right[3])
+        pygame.draw.polygon(screen, "black", pts_left)
+        pygame.draw.polygon(screen, "black", pts_right)
+
+    def draw_back_window(self, screen):
+        pts = [[0, 0] for i in range(4)]
+         
+        height_vec = orthogonal_vector(self.front_left, self.front_right, self.height // 7, -1, self.width)
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width / 4, 1, self.height)         
+        add_vector_to_point(self.rear_left, height_vec, pts[0])
+        add_vector_to_point(pts[0], width_vec, pts[0])
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width / 2, 1, self.height) 
+        add_vector_to_point(pts[0], width_vec, pts[1])
+
+        height_vec = orthogonal_vector(self.front_left, self.front_right, self.height // 15, -1, self.width)
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width / 8, 1, self.height) 
+        add_vector_to_point(pts[0], width_vec, pts[3])
+        add_vector_to_point(pts[3], height_vec, pts[3])
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width // 4, 1, self.height)
+        add_vector_to_point(pts[3], width_vec, pts[2])
+        pygame.draw.polygon(screen, "black", pts)
+
+    def draw_inside(self, screen):
+        #1/20 of width
+        pts = [[0, 0] for i in range(4)]
+        line_width = self.width // 20  
+        height_vec = orthogonal_vector(self.front_left, self.front_right, line_width, -1, self.width)
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, line_width, 1, self.height)         
+        add_vector_to_point(self.rear_left, height_vec, pts[0])
+        add_vector_to_point(pts[0], width_vec, pts[0])
+
+        height_vec = orthogonal_vector(self.front_left, self.front_right, self.height * 14 / 15 - line_width, -1, self.width)
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width * 0.9, 1, self.height) 
+
+        add_vector_to_point(pts[0], height_vec, pts[1])
+        add_vector_to_point(pts[1], width_vec, pts[2])
+        add_vector_to_point(pts[0], width_vec, pts[3])
+        pygame.draw.polygon(screen, "orange", pts)
 
     def draw(self, screen):
-        pygame.draw.polygon(screen, "orange", self.corners)
-        pygame.draw.polygon(screen, "black", self.corners, 3)
+        pygame.draw.polygon(screen, "black", self.corners)
+        self.draw_inside(screen)
         self.draw_lights(screen)
-
-        #self.draw_window(screen)
+        self.draw_wing_mirrors(screen)
+        self.draw_front_window(screen)
+        self.draw_side_windows(screen)
+        self.draw_back_window(screen)
 
     def find_left_corners(self):
         ort_vec = orthogonal_vector(self.rear_right, self.front_right, self.width, -1, vec_len=self.height)
