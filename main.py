@@ -19,7 +19,7 @@ while True:
     elif keys[pygame.K_RIGHT]:
         c.turn(0.05, 1)
     if keys[pygame.K_UP]:
-        c.vel += 0.1
+        c.vel += 50
     elif keys[pygame.K_DOWN]:
         c.vel -= 0.1
     screen.fill("darkgray")

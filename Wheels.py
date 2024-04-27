@@ -1,12 +1,7 @@
 import math
 
-def move_point(p, vec, vec_len):
-    p[0] += vec[0]*vec_len
-    p[1] += vec[1]*vec_len
-    return p
-
 def rotate_over_point(p, rotate_point, angle, dir):
-    if dir == -1:
+    if dir == 1:
         angle = math.pi * 2 - angle
     s = math.sin(angle)
     c = math.cos(angle)
@@ -28,31 +23,35 @@ class Wheels:
         self.max_right_direction = rotate_over_point([0, 1], (0, 0), max_angle, 1)
         self.direction = [0, 1]
 
-    def cur_wheel_angle(self, car):
-        x1 = self.direction[0]
-        y1 = self.direction[1]
-        x2 = car.front_left[0] - car.rear_left[0]
-        y2 = car.front_left[1] - car.rear_left[1]
-        dot = x1*x2 + y1*y2
-        det = x1*y2 - y1*x2
-        return math.atan2(det, dot)
+    def is_turn_right(self):
+        return self.direction[0] > 0
 
+    def sin_cur_angle(self):
+        return self.direction[1]
+    
+    def cos_cur_angle(self):
+        return self.direction[0]
+
+    def cur_wheel_angle(self):
+        #kat odchylenia od osi wyprostowanych kół
+        if self.is_turn_right():
+            return math.pi / 2 - math.acos(self.direction[0])
+        else:
+            return math.acos(self.direction[0]) - math.pi / 2
+
+    def cur_movement_direction(self, car_dir):
+        mov_dir = car_dir[:]
+
+        if self.is_turn_right(): rotate_dir = 1 
+        else: rotate_dir = -1
+
+        rotate_over_point(mov_dir, (0, 0), self.cur_wheel_angle(), rotate_dir)
+        return mov_dir
+        
     def turn(self, angle, dir):
+        #change wheels position
         self.direction = rotate_over_point(self.direction, (0, 0), angle, dir)
-        if self.direction[0] < self.max_left_direction[0]:
-            self.direction = self.max_left_direction
-        elif self.direction[1] > self.max_right_direction[1]:
-            self.direction = self.max_right_direction
-
-    def move_front_wheels(self, corners, vel):
-        rear_left, rear_right, front_right, front_left = corners
-        if self.direction[0] > -1:
-            #turn right
-            move_point(front_right, self.direction, vel)
-            rotate_point_vec = [rear_right[0] - rear_left[0], rear_right[1] - rear_left[1]]
-            if self.direction[0] == 0:
-                vec_len = 1000000
-            else: vec_len = math.pi / 2 / self.direction[0]
-            #vec_len = self.direction / (math.pi / 2)
-            rotate_point = [rear_left[0] + rotate_point_vec[0]*vec_len, rear_left[1] + rotate_point_vec[1]*vec_len]
-            rotate_over_point(front_left, rotate_point, vel/distance(rotate_point, front_left), 1)
+        if self.direction[0] > self.max_right_direction[0]:
+            self.direction[:] = self.max_right_direction
+        elif self.direction[0] < self.max_left_direction[0]:
+            self.direction[:] = self.max_left_direction
