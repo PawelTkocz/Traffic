@@ -6,7 +6,7 @@ pygame.init()
 screen = pygame.display.set_mode((1400, 800))
 clock = pygame.time.Clock()
 
-c = Car.Car(100, 180, 700, 200)
+c = Car.Car(100, 180, 700, 200, color="orange")
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
