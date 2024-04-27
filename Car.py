@@ -48,13 +48,13 @@ class Car:
         light_right_pts = [[0, 0] for i in range(4)]
         height_vec = orthogonal_vector(self.front_left, self.front_right, self.height // 15, 1, self.width)
         width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width // 4, 1, self.height)   
-        light_left_pts[0] = self.front_left
+        light_left_pts[0] = self.front_left[:]
         add_vector_to_point(self.front_left, height_vec, light_left_pts[1])
         add_vector_to_point(light_left_pts[1], width_vec, light_left_pts[2])
         add_vector_to_point(self.front_left, width_vec, light_left_pts[3])
 
         width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width // 4, -1, self.height)   
-        light_right_pts[0] = self.front_right
+        light_right_pts[0] = self.front_right[:]
         add_vector_to_point(self.front_right, height_vec, light_right_pts[1])
         add_vector_to_point(light_right_pts[1], width_vec, light_right_pts[2])
         add_vector_to_point(self.front_right, width_vec, light_right_pts[3])
@@ -152,6 +152,41 @@ class Car:
         add_vector_to_point(pts[3], width_vec, pts[2])
         pygame.draw.polygon(screen, "black", pts)
 
+    def draw_wheels(self, screen):
+        wheel_left_pts = [[0, 0] for i in range(4)]
+        wheel_right_pts = [[0, 0] for i in range(4)]
+
+        wheel_left_pts[0] = self.front_left[:]
+        wheel_right_pts[0] = self.front_right[:]
+        height_vec = orthogonal_vector(self.front_left, self.front_right, self.height // 4, 1, self.width)      
+        add_vector_to_point(self.front_left, height_vec, wheel_left_pts[1])
+        add_vector_to_point(self.front_right, height_vec, wheel_right_pts[1]) 
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width // 8, 1, self.height)   
+        add_vector_to_point(wheel_left_pts[0], width_vec, wheel_left_pts[3])
+        add_vector_to_point(wheel_left_pts[1], width_vec, wheel_left_pts[2])
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width // 8, -1, self.height)   
+        add_vector_to_point(wheel_right_pts[0], width_vec, wheel_right_pts[3])
+        add_vector_to_point(wheel_right_pts[1], width_vec, wheel_right_pts[2])
+
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width // 16, 1, self.height)   
+        height_vec = orthogonal_vector(self.front_left, self.front_right, self.height // 8, 1, self.width)  
+        rotate_point_left = [0, 0]
+        add_vector_to_point(self.front_left, height_vec, rotate_point_left)
+        add_vector_to_point(rotate_point_left, width_vec, rotate_point_left)
+        rotate_point_right = [0, 0]
+        width_vec = orthogonal_vector(self.rear_left, self.front_left, self.width // 16, -1, self.height)   
+        add_vector_to_point(self.front_right, height_vec, rotate_point_right)
+        add_vector_to_point(rotate_point_right, width_vec, rotate_point_right)
+        rotate_dir = -1
+        if self.wheels.is_turn_right():
+            rotate_dir = 1
+
+        wheel_left_pts = [Wheels.rotate_over_point(p, rotate_point_left, self.wheels.cur_wheel_angle(), rotate_dir) for p in wheel_left_pts]
+        wheel_right_pts = [Wheels.rotate_over_point(p, rotate_point_right, self.wheels.cur_wheel_angle(), rotate_dir) for p in wheel_right_pts]
+
+        pygame.draw.polygon(screen, "#262626", wheel_left_pts)
+        pygame.draw.polygon(screen, "#262626", wheel_right_pts)   
+
     def draw_inside(self, screen):
         #1/20 of width
         pts = [[0, 0] for i in range(4)]
@@ -170,6 +205,7 @@ class Car:
         pygame.draw.polygon(screen, "orange", pts)
 
     def draw(self, screen):
+        self.draw_wheels(screen)
         pygame.draw.polygon(screen, "black", self.corners)
         self.draw_inside(screen)
         self.draw_lights(screen)
