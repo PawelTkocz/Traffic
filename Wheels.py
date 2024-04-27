@@ -19,25 +19,22 @@ def distance(p1, p2):
 class Wheels:
     def __init__(self, max_angle):
         self.max_angle = max_angle
-        self.max_left_direction = rotate_over_point([0, 1], (0, 0), max_angle, -1)
-        self.max_right_direction = rotate_over_point([0, 1], (0, 0), max_angle, 1)
-        self.direction = [0, 1]
+        self.max_left_direction = rotate_over_point([1, 0], (0, 0), max_angle, -1)
+        self.max_right_direction = rotate_over_point([1, 0], (0, 0), max_angle, 1)
+        self.direction = [1, 0]
 
     def is_turn_right(self):
-        return self.direction[0] > 0
+        return self.direction[1] < 0
 
     def sin_cur_angle(self):
-        return self.direction[1]
+        return abs(self.direction[1])
     
     def cos_cur_angle(self):
         return self.direction[0]
 
     def cur_wheel_angle(self):
         #kat odchylenia od osi wyprostowanych kół
-        if self.is_turn_right():
-            return math.pi / 2 - math.acos(self.direction[0])
-        else:
-            return math.acos(self.direction[0]) - math.pi / 2
+        return math.acos(self.direction[0])
 
     def cur_movement_direction(self, car_dir):
         mov_dir = car_dir[:]
@@ -51,7 +48,7 @@ class Wheels:
     def turn(self, angle, dir):
         #change wheels position
         self.direction = rotate_over_point(self.direction, (0, 0), angle, dir)
-        if self.direction[0] > self.max_right_direction[0]:
-            self.direction[:] = self.max_right_direction
-        elif self.direction[0] < self.max_left_direction[0]:
+        if self.direction[1] > self.max_left_direction[1]:
             self.direction[:] = self.max_left_direction
+        elif self.direction[1] < self.max_right_direction[1]:
+            self.direction[:] = self.max_right_direction

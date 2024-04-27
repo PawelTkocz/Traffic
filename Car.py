@@ -79,5 +79,3 @@ class Car:
             self.find_right_corners()
 
         self.calcutate_cur_direction()
-        print(self.corners)
-        
