@@ -11,6 +11,7 @@ def move_point(p, vec, vec_len):
     return p
 
 class Car:
+    """Class simulating functioning of car in Cartesian coordinate system"""
     turning_speed = 0.05
     acceleration = 0.1
     max_speed = 10
