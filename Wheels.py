@@ -27,13 +27,13 @@ class Wheels:
         return self.direction[1] < 0
 
     def sin_cur_angle(self):
-        return abs(self.direction[1])
+        return min(abs(self.direction[1]), 1)
     
     def cos_cur_angle(self):
-        return self.direction[0]
+        return min(self.direction[0], 1)
 
     def cur_wheel_angle(self):
-        return math.acos(self.direction[0])
+        return math.acos(self.cos_cur_angle())
 
     def cur_movement_direction(self, car_dir):
         mov_dir = car_dir[:]
