@@ -27,7 +27,7 @@ class Car:
             self.direction = normalize_vector(direction)
         self.front_left = [start_x, start_y]
         self.find_starting_coordinates()
-        self.wheels = Wheels.Wheels(math.pi / 4)
+        self.wheels = Wheels.Wheels(math.pi / 3)
         self.vel = 0
         self.car_drafter = CarDrafter.CarDrafter(width, length, color)
 

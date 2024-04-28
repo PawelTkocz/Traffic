@@ -17,3 +17,15 @@ class CarAdapter(Car.Car):
 
     def turn_right(self):
         self.wheels.turn(self.turning_speed, -1)
+
+    def front_left_pos(self):
+        return self.front_right[:]
+    
+    def front_right_pos(self):
+        return self.front_left[:]
+    
+    def rear_left_pos(self):
+        return self.rear_right[:]
+    
+    def rear_right_pos(self):
+        return self.rear_left[:]

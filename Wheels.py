@@ -37,6 +37,9 @@ class Wheels:
     def cos_cur_angle(self):
         return min(self.direction[0], 1)
 
+    def is_max_angle(self):
+        return self.direction == self.max_right_direction or self.direction == self.max_left_direction
+
     def cur_wheel_angle(self):
         return math.acos(self.cos_cur_angle())
 
