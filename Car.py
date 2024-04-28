@@ -13,7 +13,8 @@ class Car:
     turning_speed = 0.05
     acceleration = 0.1
     max_speed = 10
-    breaking = 0.1
+    brake_val = 0.1
+    resistance = 0.03
 
     def __init__(self, width, height, start_x, start_y, *, color):
         self.width = width
@@ -38,13 +39,16 @@ class Car:
             self.vel -= self.acceleration
             self.vel = max(self.vel, -1 * self.max_speed)
 
-    def slow_down(self):
+    def slow_down(self, vel):
         if self.vel > 0:
-            self.vel -= self.breaking
+            self.vel -= vel
             self.vel = max(0, self.vel)
         elif self.vel < 0:
-            self.vel += self.breaking
+            self.vel += vel
             self.vel = min(0, self.vel)
+
+    def brake(self):
+        self.slow_down(self.brake_val)
 
     def turn_left(self):
         self.wheels.turn(self.turning_speed, -1)
@@ -88,3 +92,4 @@ class Car:
             self.find_right_corners()
 
         self.calcutate_cur_direction()
+        self.slow_down(self.resistance)

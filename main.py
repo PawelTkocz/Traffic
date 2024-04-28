@@ -23,7 +23,7 @@ while True:
     if keys[pygame.K_UP]:
         c.speed_up_front()
     elif keys[pygame.K_SPACE]:
-        c.slow_down()
+        c.brake()
     elif keys[pygame.K_DOWN]:
         c.speed_up_reverse()
     screen.fill("darkgray")
