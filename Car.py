@@ -10,6 +10,11 @@ def move_point(p, vec, vec_len):
     return p
 
 class Car:
+    turning_speed = 0.05
+    acceleration = 0.1
+    max_speed = 10
+    breaking = 0.1
+
     def __init__(self, width, height, start_x, start_y, *, color):
         self.width = width
         self.height = height
@@ -23,8 +28,29 @@ class Car:
         self.vel = 0
         self.car_drafter = CarDrafter.CarDrafter(width, height, color)
 
-    def turn(self, angle, dir):
-        self.wheels.turn(angle, dir)
+    def speed_up_front(self):
+        if self.vel >= 0:
+            self.vel += self.acceleration
+            self.vel = min(self.vel, self.max_speed)
+
+    def speed_up_reverse(self):
+        if self.vel <= 0:
+            self.vel -= self.acceleration
+            self.vel = max(self.vel, -1 * self.max_speed)
+
+    def slow_down(self):
+        if self.vel > 0:
+            self.vel -= self.breaking
+            self.vel = max(0, self.vel)
+        elif self.vel < 0:
+            self.vel += self.breaking
+            self.vel = min(0, self.vel)
+
+    def turn_left(self):
+        self.wheels.turn(self.turning_speed, -1)
+
+    def turn_right(self):
+        self.wheels.turn(self.turning_speed, 1)
 
     def find_left_corners(self):
         ort_vec = orthogonal_vector(self.rear_right, self.front_right, self.width, -1, vec_len=self.height)
@@ -45,7 +71,6 @@ class Car:
         self.car_drafter.draw(self.corners, self.wheels.cur_wheel_angle(), self.wheels.is_turn_right(), screen)
 
     def move(self):
-        #policzyc czy to dziala tez dla ruchu w tyl
         movement_dir = self.wheels.cur_movement_direction(self.direction) 
         if self.wheels.is_turn_right():
             move_point(self.front_right, movement_dir, self.vel)

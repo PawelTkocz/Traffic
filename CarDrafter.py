@@ -7,7 +7,7 @@ def add_vector_to_point(p_b, vec, p_e):
     p_e[1] = p_b[1] + vec[1]
 
 def orthogonal_vector(vec_b, vec_e, end_len, dir, vec_len = 0):
-    """creates orthogonal vector to vec that 'turns' right or left depending on dir"""
+    """Creates orthogonal vector to vec that 'turns' right or left depending on dir"""
     vec = [vec_e[0] - vec_b[0], vec_e[1] - vec_b[1]]
     
     if dir == 1: orth_vec = [vec[1], -1 * vec[0]]
@@ -22,6 +22,7 @@ def orthogonal_vector(vec_b, vec_e, end_len, dir, vec_len = 0):
     return orth_vec
 
 class CarDrafter:
+    """Class responsible for drawing car on the screen"""
     def __init__(self, width, height, color):
         self.width = width
         self.height = height

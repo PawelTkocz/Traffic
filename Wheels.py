@@ -33,7 +33,6 @@ class Wheels:
         return self.direction[0]
 
     def cur_wheel_angle(self):
-        #kat odchylenia od osi wyprostowanych kół
         return math.acos(self.direction[0])
 
     def cur_movement_direction(self, car_dir):
@@ -46,7 +45,6 @@ class Wheels:
         return mov_dir
         
     def turn(self, angle, dir):
-        #change wheels position
         self.direction = rotate_over_point(self.direction, (0, 0), angle, dir)
         if self.direction[1] > self.max_left_direction[1]:
             self.direction[:] = self.max_left_direction
