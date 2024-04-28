@@ -18,6 +18,16 @@ class CarAdapter(Car.Car):
     def turn_right(self):
         self.wheels.turn(self.turning_speed, -1)
 
+    def straighten_wheels(self):
+        if self.is_turning_right():
+            self.turn_right()
+            if not self.is_turning_right():
+                self.wheels.make_straight()
+        else:
+            self.turn_left()
+            if self.is_turning_right():
+                self.wheels.make_straight()
+
     def front_left_pos(self):
         return self.front_right[:]
     

@@ -31,6 +31,12 @@ class Wheels:
     def is_turn_right(self):
         return self.direction[1] < 0
 
+    def are_straight(self):
+        return self.direction == [1, 0]
+
+    def make_straight(self):
+        self.direction = [1, 0]
+
     def sin_cur_angle(self):
         return min(abs(self.direction[1]), 1)
     

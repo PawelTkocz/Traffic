@@ -39,15 +39,29 @@ class Car:
         self.rear_right = add_vector_to_point(self.rear_left, width_vec)
         self.corners = [self.rear_left, self.rear_right, self.front_right, self.front_left]
 
-    def speed_up_front(self):
+    def speed_up_front(self, limit=None):
         if self.vel >= 0:
-            self.vel += self.acceleration
-            self.vel = min(self.vel, self.max_speed)
+            if limit is None:
+                self.vel += self.acceleration
+                self.vel = min(self.vel, self.max_speed)
+            elif self.vel <= limit:
+                self.vel += self.acceleration
+                self.vel = min(self.vel, limit)
+            else:
+                self.brake()
+                self.vel = max(self.vel, limit)
 
-    def speed_up_reverse(self):
+    def speed_up_reverse(self, limit=None):
         if self.vel <= 0:
-            self.vel -= self.acceleration
-            self.vel = max(self.vel, -1 * self.max_speed)
+            if limit is None:
+                self.vel -= self.acceleration
+                self.vel = max(self.vel, -1 * self.max_speed)
+            elif self.vel >= limit:
+                self.vel -= self.acceleration
+                self.vel = max(self.vel, limit)
+            else:
+                self.brake()
+                self.vel = min(self.vel, limit)
 
     def slow_down(self, vel):
         if self.vel > 0:
@@ -66,6 +80,19 @@ class Car:
     def turn_right(self):
         self.wheels.turn(self.turning_speed, 1)
 
+    def is_turning_right(self):
+        return self.wheels.is_turn_right()
+
+    def straighten_wheels(self):
+        if self.is_turning_right():
+            self.turn_left()
+            if not self.is_turning_right():
+                self.wheels.make_straight()
+        else:
+            self.turn_right()
+            if self.is_turning_right():
+                self.wheels.make_straight()
+
     def find_left_corners(self):
         ort_vec = orthogonal_vector(self.rear_right, self.front_right, self.width, -1, vec_len=self.length)
         add_vector_to_point(self.front_right, ort_vec, self.front_left)
@@ -81,11 +108,11 @@ class Car:
         self.direction = normalize_vector(vec)
 
     def draw(self, screen):
-        self.car_drafter.draw(self.corners, self.wheels.cur_wheel_angle(), self.wheels.is_turn_right(), screen)
+        self.car_drafter.draw(self.corners, self.wheels.cur_wheel_angle(), self.is_turning_right(), screen)
 
     def move(self):
         movement_dir = self.wheels.cur_movement_direction(self.direction) 
-        if self.wheels.is_turn_right():
+        if self.is_turning_right():
             move_point(self.front_right, movement_dir, self.vel)
             rear_right_vel = (self.length
                               - math.sqrt(self.length**2 - self.vel**2 * self.wheels.sin_cur_angle()**2)

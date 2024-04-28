@@ -13,13 +13,17 @@ class ParallelParkingDemo:
         offset_x = (self.screen_width - 3.5 * self.car_lenght) // 2
         offset_y = self.screen_height - 1.5 * self.car_width
         self.c1 = car_factory.get_car(self.car_width, self.car_lenght, offset_x + self.car_lenght, offset_y, [1, 0], color="#4287f5")
-        self.c2 = car_factory.get_car(self.car_width, self.car_lenght, 0, 0, [1, 0], color="#e8e531")
-        print(self.c2.corners)
-        #self.c2 = car_factory.get_car(self.car_width, self.car_lenght, offset_x + 3.5 * self.car_lenght, offset_y, [1, 0], color="#e8e531")
-        self.c3 = car_factory.get_car(self.car_width, self.car_lenght, offset_x, offset_y - 1.5*self.car_width, [1, 0], color="#b82f11")
+        self.c2 = car_factory.get_car(self.car_width, self.car_lenght, offset_x + 3.5 * self.car_lenght, offset_y, [1, 0], color="#e8e531")
+        #poczatek
+        #self.c3 = car_factory.get_car(self.car_width, self.car_lenght, offset_x, offset_y - 1.5*self.car_width, [1, 0], color="#b82f11")
+        #zaparkowany
+        #self.c3 = car_factory.get_car(self.car_width, self.car_lenght, offset_x + 2.25 * self.car_lenght, offset_y, [1, 0], color="#b82f11")
+        self.c3 = car_factory.get_car(self.car_width, self.car_lenght, 1320, 243, [1, 0], color="#b82f11")
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         self.cur_phase = 0
-        self.phases = [self.phase_zero, self.phase_one, self.phase_two, self.phase_three, self.phase_four, self.phase_five]
+        self.phases = [self.phase_zero, self.phase_one, self.phase_two, self.phase_three, 
+                       self.phase_four, self.phase_five, self.phase_six, self.phase_seven,
+                       self.phase_eight]
 
     def draw(self):
         self.screen.fill("darkgray")
@@ -28,8 +32,10 @@ class ParallelParkingDemo:
         self.c3.draw(self.screen)
 
     def phase_zero(self):
-        self.c3.speed_up_front()
-        if self.c3.front_left[0] > self.c2.rear_left[0]:
+        self.cur_phase = 2
+        self.phase_two()
+        self.c3.speed_up_front(1)
+        if self.c3.front_left_pos()[0] > self.c2.front_left_pos()[0]:
             self.cur_phase += 1
 
     def phase_one(self):
@@ -43,18 +49,38 @@ class ParallelParkingDemo:
             self.cur_phase += 1
 
     def phase_three(self):
-        self.c3.speed_up_reverse()
-        if self.c3.rear_right[1] > self.c2.rear_left[1]:
+        self.c3.speed_up_reverse(-3)
+        if self.c3.rear_right_pos()[1] > 500:
             self.cur_phase += 1
+        #if self.c3.rear_right_pos()[1] > self.c2.rear_left_pos()[1]:
+        #    self.cur_phase += 1
     
     def phase_four(self):
-        self.c3.vel = 0
-        self.c3.turn_left()
-        if self.c3.wheels.is_max_angle():
+        self.c3.brake()
+        self.c3.straighten_wheels()
+        if self.c3.wheels.are_straight():
             self.cur_phase += 1
 
     def phase_five(self):
+        if self.c3.vel == 0: return
+        self.c3.speed_up_reverse(-2)
+        if self.c3.rear_left_pos()[1] > self.c1.front_left_pos()[1] - 30:
+            self.c3.vel = 0
+            #self.cur_phase += 1
+
+    def phase_six(self):
         self.c3.brake()
+        self.c3.turn_right()
+        if self.c3.wheels.is_max_angle():
+            self.cur_phase += 1
+
+    def phase_seven(self):
+        self.c3.speed_up_front(3)
+        if self.c3.front_left_pos()[0] > self.c2.rear_left_pos()[0] - 20:
+            self.cur_phase += 1
+
+    def phase_eight(self):
+        self.c3.vel = 0
 
     def next_frame(self):
         self.phases[self.cur_phase]()
@@ -83,7 +109,11 @@ while True:
         demo.c3.brake()
     elif keys[pygame.K_DOWN]:
         demo.c3.speed_up_reverse()
+    elif keys[pygame.K_0]:
+        print(demo.c3.rear_left_pos(), demo.c3.rear_right_pos(), demo.c3.front_left_pos(), demo.c3.front_right_pos())
 
     demo.next_frame()
+    #demo.c3.move()
+    #demo.c3.draw(demo.screen)
     pygame.display.update()
     clock.tick(60)
