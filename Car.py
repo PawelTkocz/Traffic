@@ -41,7 +41,7 @@ class Car:
 
     def speed_up_front(self, limit=None):
         if self.vel >= 0:
-            if limit is None:
+            if limit is None or limit > self.max_speed:
                 self.vel += self.acceleration
                 self.vel = min(self.vel, self.max_speed)
             elif self.vel <= limit:
@@ -53,7 +53,7 @@ class Car:
 
     def speed_up_reverse(self, limit=None):
         if self.vel <= 0:
-            if limit is None:
+            if limit is None or limit < -1 * self.max_speed:
                 self.vel -= self.acceleration
                 self.vel = max(self.vel, -1 * self.max_speed)
             elif self.vel >= limit:
