@@ -1,7 +1,7 @@
 import CarDrafter
 from CarDrafter import orthogonal_vector
 from CarDrafter import add_vector_to_point
-from Wheels import distance
+from Wheels import normalize_vector
 import math
 import Wheels
 
@@ -9,11 +9,6 @@ def move_point(p, vec, vec_len):
     p[0] += vec[0]*vec_len
     p[1] += vec[1]*vec_len
     return p
-
-def normalize_vector(vec):
-    len = distance((0, 0), vec)
-    if len == 0: return vec
-    return [vec[0] / len, vec[1] / len]
 
 class Car:
     turning_speed = 0.05
@@ -82,8 +77,7 @@ class Car:
 
     def calcutate_cur_direction(self):
         vec = [self.front_left[0] - self.rear_left[0], self.front_left[1] - self.rear_left[1]]
-        self.direction[0] = vec[0] / self.length
-        self.direction[1] = vec[1] / self.length
+        self.direction = normalize_vector(vec)
 
     def draw(self, screen):
         self.car_drafter.draw(self.corners, self.wheels.cur_wheel_angle(), self.wheels.is_turn_right(), screen)

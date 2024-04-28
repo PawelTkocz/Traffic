@@ -16,6 +16,11 @@ def rotate_over_point(p, rotate_point, angle, dir):
 def distance(p1, p2):
     return math.sqrt((p1[0]-p2[0])**2 + (p1[1]-p2[1])**2)
 
+def normalize_vector(vec):
+    len = distance((0, 0), vec)
+    if len == 0: return vec
+    return [vec[0] / len, vec[1] / len]
+
 class Wheels:
     def __init__(self, max_angle):
         self.max_angle = max_angle
@@ -37,7 +42,6 @@ class Wheels:
 
     def cur_movement_direction(self, car_dir):
         mov_dir = car_dir[:]
-
         if self.is_turn_right(): rotate_dir = 1 
         else: rotate_dir = -1
 
@@ -50,3 +54,4 @@ class Wheels:
             self.direction[:] = self.max_left_direction
         elif self.direction[1] < self.max_right_direction[1]:
             self.direction[:] = self.max_right_direction
+        self.direction = normalize_vector(self.direction)
