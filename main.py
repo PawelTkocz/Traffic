@@ -7,7 +7,7 @@ pygame.init()
 screen = pygame.display.set_mode((1400, 800))
 clock = pygame.time.Clock()
 car_factory = CarFactory.CarFactory()
-c = car_factory.get_car(100, 180, 700, 200)
+c = car_factory.get_car(100, 180, 700, 200, [1, 0])
 
 while True:
     for event in pygame.event.get():
