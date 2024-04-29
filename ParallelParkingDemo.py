@@ -1,6 +1,6 @@
 import pygame
-import Car
 import CarFactory
+import BackgroundDrafter
 from sys import exit
 
 class ParallelParkingDemo:
@@ -22,24 +22,10 @@ class ParallelParkingDemo:
         self.phases = [self.phase_zero, self.phase_one, self.phase_two, self.phase_three, 
                        self.phase_four, self.phase_five, self.phase_six, self.phase_seven,
                        self.phase_eight, self.phase_nine, self.phase_ten, self.restart]
-
-    def draw_dashed_line(self, line_len, line_width, space, offset_y):
-        i = space // 2
-        while i < self.screen_width:
-            pygame.draw.rect(self.screen, "#c3dedd", pygame.Rect(i, offset_y, line_len, line_width))
-            i += line_len + space
-
-    def draw_side_line(self):
-        self.draw_dashed_line(200, 25, 200, self.screen_height-200 - 2*self.car_width)
-
-    def draw_center_line(self):
-        self.draw_dashed_line(100, 50, 100, self.screen_height-140 - self.car_width)      
+        self.background_drafter = BackgroundDrafter.BackgroundDrafter(self.screen_width, self.screen_height)
 
     def draw(self):
-        self.screen.fill("#343536")
-        pygame.draw.rect(self.screen, "#6e6362", pygame.Rect(0, self.screen_height-90, self.screen_width, 90))
-        self.draw_side_line()
-        self.draw_center_line()
+        self.background_drafter.draw(self.screen)
         self.c1.draw(self.screen)
         self.c2.draw(self.screen)
         self.c3.draw(self.screen)
