@@ -11,7 +11,7 @@ class CarAdapter(Car.Car):
         super().__init__(width, length, front_left_pos, direction, wheels_max_turn, color=color)
         
         width_vec = Vector(Point(0, 0), self.direction).orthogonal_vector(self.width, TurnDir.LEFT)
-        self.front_left = front_left_pos.add_vector(width_vec)
+        front_left_pos.add_vector(width_vec, False)
         self.corners = Rectangle(front_left_pos, width, length, self.direction)
     
     def turn_left(self):
