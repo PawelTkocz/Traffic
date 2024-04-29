@@ -85,7 +85,7 @@ class Car:
 
     def cur_movement_vector(self):
         mov_dir = self.direction.copy()
-        mov_dir.rotate_over_point((0, 0), self.wheels.cur_wheel_angle(), self.which_side_turn())
+        mov_dir.rotate_over_point(Point(0, 0), self.wheels.cur_wheel_angle(), self.which_side_turn())
         mov_dir.scale_to_len(self.vel, False)
         return mov_dir
 

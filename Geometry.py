@@ -1,5 +1,6 @@
 from enum import Enum
 import math
+import numbers
 
 def on_segment(p, q, r):
     #https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
@@ -59,6 +60,7 @@ class Point:
         else:
             self.x += v.x
             self.y += v.y
+            return self
 
     def rotate_over_point(self, rotate_point, angle, dir):
         if dir == TurnDir.RIGHT:
@@ -74,6 +76,7 @@ class Point:
         new_y = self.x * s + self.y * c
         self.x = new_x + rotate_point.x
         self.y = new_y + rotate_point.y
+        return self
 
     def compare(self, p):
         return self.x == p.x and self.y == p.y
@@ -86,7 +89,10 @@ class Vector(Point):
     """Vector is represented by single Point - it represents the vector [(0, 0), Point]"""
     
     def __init__(self, b, e):
-        super().__init__(e.x - b.x, e.y - b.y)
+        if isinstance(b, numbers.Number) and isinstance(e, numbers.Number):
+            super().__init__(b, e)
+        else:
+            super().__init__(e.x - b.x, e.y - b.y)
 
     def add_vector(self, v, ret_new_vec=True):
         if ret_new_vec:
@@ -94,6 +100,7 @@ class Vector(Point):
         else:
             self.x += v.x
             self.y += v.y
+            return self
 
     def len(self):
         return math.sqrt( self.x **2 + self.y **2) 
@@ -104,6 +111,7 @@ class Vector(Point):
         else:
             self.x *= k
             self.y *= k
+            return self
 
     def scale_to_len(self, res_len, ret_new_vec=True):
         if self.len() == 0:
@@ -137,15 +145,16 @@ class Vector(Point):
         else:
             self.x = new_vec.x
             self.y = new_vec.y
+            return self
     
     def copy(self):
-        return Vector((0, 0), Point(self.x, self.y))
+        return Vector(self.x, self.y)
 
 class Rectangle():
     """Class representing 'directed' rectangle - with front, left and right side, and rear"""
     def __init__(self, front_left, width, length, direction):
         self.width = width
-        self.length = self.length
+        self.length = length
         self.front_left = Point(front_left.x, front_left.y)
         width_vec = direction.orthogonal_vector(width, TurnDir.RIGHT)
         length_vec = width_vec.orthogonal_vector(length, TurnDir.RIGHT)
@@ -160,7 +169,7 @@ class Rectangle():
         self.front_left.add_vector(front_vec, False)
         self.rear_left.add_vector(rear_vec, False)
         v = Vector(self.rear_left, self.front_left).scale_to_len(self.length, False)
-        self.front_left = self.rear_left.add_vector(v)
+        self.front_left = self.rear_left.add_vector(v, False)
         self.find_right_side()
         return self.find_cur_direction()
 
@@ -168,7 +177,7 @@ class Rectangle():
         self.front_right.add_vector(front_vec, False)
         self.rear_right.add_vector(rear_vec, False)
         v = Vector(self.rear_right, self.front_right).scale_to_len(self.length, False)
-        self.front_right = self.rear_right.add_vector(v)
+        self.front_right = self.rear_right.add_vector(v, False)
         self.find_left_side()
         return self.find_cur_direction()
 
@@ -177,7 +186,7 @@ class Rectangle():
         self.front_left = self.front_right.add_vector(width_vec)
         self.rear_left = self.rear_right.add_vector(width_vec)
 
-    def find_right_corners(self):
+    def find_right_side(self):
         width_vec = Vector(self.rear_left, self.front_left).orthogonal_vector(self.width, TurnDir.RIGHT)
         self.front_right = self.front_left.add_vector(width_vec)
         self.rear_right = self.rear_left.add_vector(width_vec)

@@ -1,5 +1,4 @@
 import Car
-from CarDrafter import add_vector_to_point, orthogonal_vector
 from Geometry import Point, Rectangle, TurnDir, Vector
 
 #do zmiany cztery ostatnie funkcie
@@ -11,7 +10,7 @@ class CarAdapter(Car.Car):
         direction.y *= -1
         super().__init__(width, length, front_left_pos, direction, wheels_max_turn, color=color)
         
-        width_vec = Vector((Point(0, 0), self.direction)).orthogonal_vector(self.width, TurnDir.LEFT)
+        width_vec = Vector(Point(0, 0), self.direction).orthogonal_vector(self.width, TurnDir.LEFT)
         self.front_left = front_left_pos.add_vector(width_vec)
         self.corners = Rectangle(front_left_pos, width, length, self.direction)
     

@@ -5,9 +5,11 @@ from Geometry import Point, TurnDir, Vector
 class Wheels:
     def __init__(self, max_angle):
         self.max_angle = max_angle
-        self.max_left_direction = Point(1, 0).rotate_over_point(Point(0, 0), max_angle, TurnDir.LEFT)
-        self.max_right_direction = Point(1, 0).rotate_over_point(Point(0, 0), max_angle, TurnDir.RIGHT)
-        self.direction = Vector(Point(0, 0), Point(1, 0))
+        self.max_left_direction = Point(1, 0)
+        self.max_left_direction.rotate_over_point(Point(0, 0), max_angle, TurnDir.LEFT)
+        self.max_right_direction = Point(1, 0)
+        self.max_right_direction.rotate_over_point(Point(0, 0), max_angle, TurnDir.RIGHT)
+        self.direction = Vector(1, 0)
 
     def which_side_turn(self):
         if self.direction.y < 0:
