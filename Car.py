@@ -92,7 +92,6 @@ class Car:
     def move(self):
         if self.vel == 0:
             return
-        
         front_movement_vec = self.cur_movement_vector()
         rear_vel =  (self.length
                      - math.sqrt(self.length**2 - self.vel**2 * self.wheels.sin_cur_angle()**2)

@@ -35,7 +35,7 @@ class ParkingGame:
         self.c3.draw(self.screen)
 
     def restart(self):
-        self.c3 = self.car_factory.get_car(self.car_width, self.car_length, (1.5 * self.car_length, 243), [1, 0], math.pi / 3, color="#b82f11")
+        self.c3 = self.car_factory.get_car(self.car_width, self.car_length, Point(1.5 * self.car_length, 243), Vector(Point(0, 0), Point(1, 0)), math.pi / 3, color="#b82f11")
         self.parking_spot_color = "#e60000"
 
     def turn_left(self):
@@ -95,6 +95,7 @@ while True:
         game.brake()
     elif keys[pygame.K_DOWN]:
         game.speed_up_reverse()
+    #print([(p.x, p.y) for p in game.c3.corners.get_corners_list()])
     game.draw()
     game.next_frame()
     pygame.display.update()

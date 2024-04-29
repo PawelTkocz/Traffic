@@ -166,10 +166,13 @@ class Rectangle():
         return Vector(self.rear_right, self.front_right).normalize(False)
 
     def move_left_side(self, front_vec, rear_vec):
+        print([(p.x, p.y) for p in self.get_corners_list()])
+        #print(front_vec.x, front_vec.y, rear_vec.x, rear_vec.y)
         self.front_left.add_vector(front_vec, False)
         self.rear_left.add_vector(rear_vec, False)
         v = Vector(self.rear_left, self.front_left).scale_to_len(self.length, False)
-        self.front_left = self.rear_left.add_vector(v, False)
+        self.front_left = self.rear_left.add_vector(v)
+        print([(p.x, p.y) for p in self.get_corners_list()])
         self.find_right_side()
         return self.find_cur_direction()
 
@@ -177,7 +180,7 @@ class Rectangle():
         self.front_right.add_vector(front_vec, False)
         self.rear_right.add_vector(rear_vec, False)
         v = Vector(self.rear_right, self.front_right).scale_to_len(self.length, False)
-        self.front_right = self.rear_right.add_vector(v, False)
+        self.front_right = self.rear_right.add_vector(v)
         self.find_left_side()
         return self.find_cur_direction()
 
