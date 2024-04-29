@@ -3,7 +3,7 @@ import CarFactory
 import BackgroundDrafter
 from sys import exit
 
-class ParallelParkingDemo:
+class ParkingDemo:
     screen_height = 800
     screen_width = 1400
     def __init__(self):
@@ -112,7 +112,7 @@ class ParallelParkingDemo:
 
 pygame.init()
 clock = pygame.time.Clock()
-demo = ParallelParkingDemo()
+demo = ParkingDemo()
 
 while True:
     for event in pygame.event.get():
