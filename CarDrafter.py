@@ -2,27 +2,6 @@ import pygame
 import Wheels
 from Wheels import rotate_over_point
 
-def add_vector_to_point(p_b, vec, p_e=None):
-    if p_e is None:
-        return [p_b[0] + vec[0], p_b[1] + vec[1]]
-    p_e[0] = p_b[0] + vec[0]
-    p_e[1] = p_b[1] + vec[1]
-
-def orthogonal_vector(vec_b, vec_e, end_len, dir, vec_len = 0):
-    """Creates orthogonal vector to vec that 'turns' right or left depending on dir"""
-    vec = [vec_e[0] - vec_b[0], vec_e[1] - vec_b[1]]
-    
-    if dir == 1: orth_vec = [vec[1], -1 * vec[0]]
-    else: orth_vec = [-1* vec[1], vec[0]]
-
-    if vec_len == 0:
-        vec_len = Wheels.distance((0, 0), orth_vec)
-    k = end_len / vec_len
-
-    orth_vec[0] *= k
-    orth_vec[1] *= k
-    return orth_vec
-
 class CarDrafter:
     """Class responsible for drawing car on the screen"""
     def __init__(self, width, length, color):

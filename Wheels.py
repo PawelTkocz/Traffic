@@ -13,9 +13,6 @@ def rotate_over_point(p, rotate_point, angle, dir):
     p[1] = new_y + rotate_point[1]
     return p
 
-def distance(p1, p2):
-    return math.sqrt((p1[0]-p2[0])**2 + (p1[1]-p2[1])**2)
-
 def normalize_vector(vec):
     len = distance((0, 0), vec)
     if len == 0: return vec
