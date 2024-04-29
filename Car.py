@@ -80,7 +80,8 @@ class Car:
                 self.wheels.make_straight()
 
     def draw(self, screen):
-        self.car_drafter.draw(self.corners, self.wheels.cur_wheel_angle(), self.which_side_turn(), screen)
+        crnrs = self.corners.get_corners_list()
+        self.car_drafter.draw(crnrs, self.wheels.cur_wheel_angle(), self.which_side_turn(), screen)
 
     def cur_movement_vector(self):
         mov_dir = self.direction.copy()

@@ -1,6 +1,7 @@
 import pygame
 import CarFactory
 import BackgroundDrafter
+import math
 from sys import exit
 
 class ParkingGame:
@@ -12,9 +13,9 @@ class ParkingGame:
         self.car_width = 200
         offset_x = (self.screen_width - 3.5 * self.car_length) // 2
         offset_y = self.screen_height - 1.5 * self.car_width
-        self.c1 = self.car_factory.get_car(self.car_width, self.car_length, offset_x + self.car_length, offset_y, [1, 0], color="#4287f5")
-        self.c2 = self.car_factory.get_car(self.car_width, self.car_length, offset_x + 3.5 * self.car_length, offset_y, [1, 0], color="#e8e531")
-        self.c3 = self.car_factory.get_car(self.car_width, self.car_length, 1.5 * self.car_length, 243, [1, 0], color="#b82f11")
+        self.c1 = self.car_factory.get_car(self.car_width, self.car_length, (offset_x + self.car_length, offset_y), [1, 0], math.pi / 3, color="#4287f5")
+        self.c2 = self.car_factory.get_car(self.car_width, self.car_length, (offset_x + 3.5 * self.car_length, offset_y), [1, 0], math.pi / 3, color="#e8e531")
+        self.c3 = self.car_factory.get_car(self.car_width, self.car_length, (1.5 * self.car_length, 243), [1, 0], math.pi / 3, color="#b82f11")
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         self.screen_rect = pygame.Rect(0, 0, self.screen_width, self.screen_height)
         self.background_drafter = BackgroundDrafter.BackgroundDrafter(self.screen_width, self.screen_height)
@@ -32,7 +33,7 @@ class ParkingGame:
         self.c3.draw(self.screen)
 
     def restart(self):
-        self.c3 = self.car_factory.get_car(self.car_width, self.car_length, 1.5 * self.car_length, 243, [1, 0], color="#b82f11")
+        self.c3 = self.car_factory.get_car(self.car_width, self.car_length, (1.5 * self.car_length, 243), [1, 0], math.pi / 3, color="#b82f11")
         self.parking_spot_color = "#e60000"
 
     def turn_left(self):

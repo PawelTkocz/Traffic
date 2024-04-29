@@ -1,7 +1,5 @@
-import Car
 import CarAdapter
 
 class CarFactory:
-    def get_car(self, width, length, start_x, start_y, direction, color="#14cc2d"):
-        #return Car.Car(width, length, start_x, start_y, direction, color=color)
-        return CarAdapter.CarAdapter(width, length, start_x, start_y, direction, color=color)
+    def get_car(self, width, length, front_left_pos, direction, wheels_max_turn, color="#14cc2d"):
+        return CarAdapter.CarAdapter(width, length, front_left_pos, direction, wheels_max_turn, color=color)

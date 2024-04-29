@@ -182,6 +182,9 @@ class Rectangle():
         self.front_right = self.front_left.add_vector(width_vec)
         self.rear_right = self.rear_left.add_vector(width_vec)
 
+    def get_corners_list(self):
+        return [self.rear_left, self.rear_right, self.front_right, self.front_left]
+
     def collides(self, rec):
         self_corners = [self.rear_left, self.rear_right, self.front_right, self.front_left]
         rec_corners = [rec.rear_left, rec.rear_right, rec.front_right, rec.front_left]
