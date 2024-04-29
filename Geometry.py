@@ -75,6 +75,13 @@ class Point:
         self.x = new_x + rotate_point.x
         self.y = new_y + rotate_point.y
 
+    def compare(self, p):
+        return self.x == p.x and self.y == p.y
+
+    def copy_coordinates_from(self, p):
+        self.x = p.x
+        self.y = p.y
+
 class Vector(Point):
     """Vector is represented by single Point - it represents the vector [(0, 0), Point]"""
     
