@@ -56,9 +56,9 @@ class ParkingGame:
     def game_over(self):
         if not all([self.screen_rect.collidepoint(c) for c in self.c3.corners]):
             return True
-        # if colliedes with c1 or c2: True
+        if self.c3.collides_car(self.c1) or self.c3.collides_car(self.c2):
+            return True
         return False
-
 
     def next_frame(self):
         self.c3.move()

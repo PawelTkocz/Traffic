@@ -5,6 +5,49 @@ from Wheels import normalize_vector
 import math
 import Wheels
 
+def on_segment(p, q, r):
+    #https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
+    
+    if ( (q[0] <= max(p[0], r[0])) and (q[0] >= min(p[0], r[0])) and 
+           (q[1] <= max(p[1], r[1])) and (q[1] >= min(p[1], r[1]))): 
+        return True
+    return False
+  
+def orientation(p, q, r): 
+    #https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
+    
+    val = (float(q[1] - p[1]) * (r[0] - q[0])) - (float(q[0] - p[0]) * (r[1] - q[1])) 
+    if (val > 0): 
+        return 1
+    elif (val < 0): 
+        return 2
+    else:  
+        return 0
+
+def do_intersect(p1,q1,p2,q2): 
+    #https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
+    o1 = orientation(p1, q1, p2) 
+    o2 = orientation(p1, q1, q2) 
+    o3 = orientation(p2, q2, p1) 
+    o4 = orientation(p2, q2, q1) 
+  
+    if ((o1 != o2) and (o3 != o4)): 
+        return True
+  
+    if ((o1 == 0) and on_segment(p1, p2, q1)): 
+        return True
+  
+    if ((o2 == 0) and on_segment(p1, q2, q1)): 
+        return True
+  
+    if ((o3 == 0) and on_segment(p2, p1, q2)): 
+        return True
+  
+    if ((o4 == 0) and on_segment(p2, q1, q2)): 
+        return True
+  
+    return False
+
 def move_point(p, vec, vec_len):
     p[0] += vec[0]*vec_len
     p[1] += vec[1]*vec_len
@@ -129,3 +172,8 @@ class Car:
 
         self.calcutate_cur_direction()
         self.slow_down(self.resistance)
+
+    def collides_car(self, car):
+        self_sides = [(self.corners[i], self.corners[(i+1) % 4]) for i in range(4)]
+        car_sides = [(car.corners[i], car.corners[(i+1) % 4]) for i in range(4)]
+        return any([do_intersect(s1[0], s1[1], s2[0], s2[1]) for s1 in self_sides for s2 in car_sides])
