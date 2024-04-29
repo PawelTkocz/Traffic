@@ -1,41 +1,44 @@
 import Car
 from CarDrafter import add_vector_to_point, orthogonal_vector
+from Geometry import Point, Rectangle, TurnDir, Vector
+
+#do zmiany cztery ostatnie funkcie
 
 class CarAdapter(Car.Car):
     """Class makes the control over the Car natural for pygame screen's coordinate system"""
 
-    def __init__(self, width, length, start_x, start_y, direction, *, color):
-        direction[1] *= -1
-        super().__init__(width, length, start_x, start_y, direction, color=color)
+    def __init__(self, width, length, front_left_pos, direction, wheels_max_turn, *, color):
+        direction.y *= -1
+        super().__init__(width, length, front_left_pos, direction, wheels_max_turn, color=color)
         
-        width_vec = orthogonal_vector((0, 0), self.direction, self.width, -1, 1)
-        self.front_left = add_vector_to_point([start_x, start_y], width_vec)
-        self.find_starting_coordinates()
+        width_vec = Vector((Point(0, 0), self.direction)).orthogonal_vector(self.width, TurnDir.LEFT)
+        self.front_left = front_left_pos.add_vector(width_vec)
+        self.corners = Rectangle(front_left_pos, width, length, self.direction)
     
     def turn_left(self):
-        self.wheels.turn(self.turning_speed, 1)
+        self.wheels.turn(self.turning_speed, TurnDir.RIGHT)
 
     def turn_right(self):
-        self.wheels.turn(self.turning_speed, -1)
+        self.wheels.turn(self.turning_speed, TurnDir.LEFT)
 
     def straighten_wheels(self):
-        if self.is_turning_right():
+        if self.which_side_turn == TurnDir.RIGHT:
             self.turn_right()
-            if not self.is_turning_right():
+            if not self.which_side_turn() == TurnDir.RIGHT:
                 self.wheels.make_straight()
         else:
             self.turn_left()
-            if self.is_turning_right():
+            if self.which_side_turn() == TurnDir.RIGHT:
                 self.wheels.make_straight()
 
     def front_left_pos(self):
-        return self.front_right[:]
+        return self.corners.front_right[:]
     
     def front_right_pos(self):
-        return self.front_left[:]
+        return self.corners.front_left[:]
     
     def rear_left_pos(self):
-        return self.rear_right[:]
+        return self.corners.rear_right[:]
     
     def rear_right_pos(self):
-        return self.rear_left[:]
+        return self.corners.rear_left[:]
