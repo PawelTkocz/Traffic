@@ -19,7 +19,8 @@ class Car:
         else:
             self.direction = Vector(Point(0, 0), Point(direction.x, direction.y)).normalize(True)
 
-        self.corners = Rectangle(front_left_pos, width, length, self.direction)
+        self.rect = Rectangle(front_left_pos, width, length, self.direction)
+
         self.wheels = Wheels(wheels_max_turn)
         self.vel = 0
         self.car_drafter = CarDrafter.CarDrafter(width, length, color)
@@ -79,8 +80,11 @@ class Car:
             if self.cur_turn_side() != TurnDir.LEFT:
                 self.wheels.make_straight()
 
+    def get_corners_list(self):
+        return [self.rect.rear_left, self.rect.rear_right, self.rect.front_right, self.rect.front_left]
+
     def draw(self, screen):
-        crnrs = self.corners.get_corners_list()
+        crnrs = self.get_corners_list()
         self.car_drafter.draw(crnrs, self.wheels.cur_angle(), self.cur_turn_side(), screen)
 
     def cur_movement_vector(self):
@@ -98,11 +102,11 @@ class Car:
                      + self.vel * self.wheels.cos_cur_angle())
         rear_movement_vec = self.direction.scale_to_len(rear_vel, True)
         if self.cur_turn_side() == TurnDir.RIGHT:
-            self.direction = self.corners.move_right_side(front_movement_vec, rear_movement_vec)
+            self.direction = self.rect.move_right_side(front_movement_vec, rear_movement_vec)
         else:
-            self.direction = self.corners.move_left_side(front_movement_vec, rear_movement_vec)
+            self.direction = self.rect.move_left_side(front_movement_vec, rear_movement_vec)
 
         self.slow_down(self.resistance)
 
     def collides_car(self, car):
-        return self.corners.collides(car.corners)
+        return self.rect.collides(car.rect)

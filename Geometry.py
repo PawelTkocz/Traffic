@@ -50,6 +50,8 @@ class TurnDir(Enum):
     STRAIGHT = 3
 
 class Point: 
+    """Class representing point in Cartesian coordinate system"""
+
     def __init__(self, x, y): 
         self.x = x 
         self.y = y
@@ -66,7 +68,7 @@ class Point:
         if dir == TurnDir.RIGHT:
             angle = math.pi * 2 - angle
         elif dir != TurnDir.LEFT:
-            return
+            return self
         
         s = math.sin(angle)
         c = math.cos(angle)
@@ -84,6 +86,7 @@ class Point:
     def copy_coordinates_from(self, p):
         self.x = p.x
         self.y = p.y
+        return self
 
 class Vector(Point):
     """Vector is represented by single Point - it represents the vector [(0, 0), Point]"""
@@ -103,11 +106,11 @@ class Vector(Point):
             return self
 
     def len(self):
-        return math.sqrt( self.x **2 + self.y **2) 
+        return math.sqrt(self.x **2 + self.y **2) 
 
     def scale(self, k, ret_new_vec=True):
         if ret_new_vec:
-            return Vector(Point(0, 0), Point(self.x * k, self.y * k))
+            return Vector(self.x * k, self.y * k)
         else:
             self.x *= k
             self.y *= k
@@ -124,27 +127,18 @@ class Vector(Point):
         """Creates orthogonal vector that 'turns' right or left depending on dir"""
         
         if dir == TurnDir.RIGHT: 
-            orth_vec = Vector(self.y, -1 * self.x)
+            return Vector(self.y, -1 * self.x).scale_to_len(vec_len, False)
         elif dir == TurnDir.LEFT:
-            orth_vec = Vector(-1 * self.y, self.x)
+            return Vector(-1 * self.y, self.x).scale_to_len(vec_len, False)
         else: 
             return Vector(self.x, self.y)
-
-        ort_vec_len = orth_vec.len()
-        if ort_vec_len == 0:
-            return orth_vec
-        else:
-            k = vec_len / ort_vec_len
-            orth_vec.scale(k, False)
-            return orth_vec
 
     def normalize(self, ret_new_vec=True):
         new_vec = self.scale_to_len(1)
         if ret_new_vec:
             return new_vec
         else:
-            self.x = new_vec.x
-            self.y = new_vec.y
+            self.copy_coordinates_from(new_vec)
             return self
     
     def copy(self):
@@ -152,6 +146,7 @@ class Vector(Point):
 
 class Rectangle():
     """Class representing 'directed' rectangle - with front, left and right side, and rear"""
+    
     def __init__(self, front_left, width, length, direction):
         self.width = width
         self.length = length
@@ -190,9 +185,6 @@ class Rectangle():
         width_vec = Vector(self.rear_left, self.front_left).orthogonal_vector(self.width, TurnDir.RIGHT)
         self.front_right = self.front_left.add_vector(width_vec)
         self.rear_right = self.rear_left.add_vector(width_vec)
-
-    def get_corners_list(self):
-        return [self.rear_left, self.rear_right, self.front_right, self.front_left]
 
     def collides(self, rec):
         self_corners = [self.rear_left, self.rear_right, self.front_right, self.front_left]

@@ -12,7 +12,7 @@ class CarAdapter(Car.Car):
         
         width_vec = Vector(Point(0, 0), self.direction).orthogonal_vector(self.width, TurnDir.LEFT)
         front_left_pos.add_vector(width_vec, False)
-        self.corners = Rectangle(front_left_pos, width, length, self.direction)
+        self.rect = Rectangle(front_left_pos, width, length, self.direction)
     
     def turn_left(self):
         self.wheels.turn(self.turning_speed, TurnDir.RIGHT)
@@ -31,13 +31,13 @@ class CarAdapter(Car.Car):
                 self.wheels.make_straight()
 
     def front_left_pos(self):
-        return self.corners.front_right
+        return self.rect.front_right
     
     def front_right_pos(self):
-        return self.corners.front_left
+        return self.rect.front_left
     
     def rear_left_pos(self):
-        return self.corners.rear_right
+        return self.rect.rear_right
     
     def rear_right_pos(self):
-        return self.corners.rear_left
+        return self.rect.rear_left
