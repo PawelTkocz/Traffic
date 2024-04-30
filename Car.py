@@ -65,27 +65,27 @@ class Car:
     def turn_right(self):
         self.wheels.turn(self.turning_speed, TurnDir.RIGHT)
 
-    def which_side_turn(self):
-        return self.wheels.which_side_turn()
+    def cur_turn_side(self):
+        return self.wheels.cur_turn_side()
 
     def straighten_wheels(self):
-        turn_side = self.which_side_turn()
+        turn_side = self.cur_turn_side()
         if turn_side == TurnDir.RIGHT:
             self.turn_left()
-            if self.which_side_turn() != TurnDir.RIGHT:
+            if self.cur_turn_side() != TurnDir.RIGHT:
                 self.wheels.make_straight()
         elif turn_side == TurnDir.LEFT:
             self.turn_right()
-            if self.which_side_turn() != TurnDir.LEFT:
+            if self.cur_turn_side() != TurnDir.LEFT:
                 self.wheels.make_straight()
 
     def draw(self, screen):
         crnrs = self.corners.get_corners_list()
-        self.car_drafter.draw(crnrs, self.wheels.cur_wheel_angle(), self.which_side_turn(), screen)
+        self.car_drafter.draw(crnrs, self.wheels.cur_angle(), self.cur_turn_side(), screen)
 
     def cur_movement_vector(self):
         mov_dir = self.direction.copy()
-        mov_dir.rotate_over_point(Point(0, 0), self.wheels.cur_wheel_angle(), self.which_side_turn())
+        mov_dir.rotate_over_point(Point(0, 0), self.wheels.cur_angle(), self.cur_turn_side())
         mov_dir.scale_to_len(self.vel, False)
         return mov_dir
 
@@ -97,7 +97,7 @@ class Car:
                      - math.sqrt(self.length**2 - self.vel**2 * self.wheels.sin_cur_angle()**2)
                      + self.vel * self.wheels.cos_cur_angle())
         rear_movement_vec = self.direction.scale_to_len(rear_vel, True)
-        if self.which_side_turn() == TurnDir.RIGHT:
+        if self.cur_turn_side() == TurnDir.RIGHT:
             self.direction = self.corners.move_right_side(front_movement_vec, rear_movement_vec)
         else:
             self.direction = self.corners.move_left_side(front_movement_vec, rear_movement_vec)

@@ -21,13 +21,13 @@ class CarAdapter(Car.Car):
         self.wheels.turn(self.turning_speed, TurnDir.LEFT)
 
     def straighten_wheels(self):
-        if self.which_side_turn() == TurnDir.RIGHT:
+        if self.cur_turn_side() == TurnDir.RIGHT:
             self.turn_right()
-            if not self.which_side_turn() == TurnDir.RIGHT:
+            if not self.cur_turn_side() == TurnDir.RIGHT:
                 self.wheels.make_straight()
         else:
             self.turn_left()
-            if self.which_side_turn() == TurnDir.RIGHT:
+            if self.cur_turn_side() == TurnDir.RIGHT:
                 self.wheels.make_straight()
 
     def front_left_pos(self):

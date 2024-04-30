@@ -143,8 +143,8 @@ class CarDrafter:
         rotate_point_right = self.front_right.add_vector(length_vec).add_vector(width_vec) 
 
         for p1, p2 in zip(wheel_left_pts, wheel_right_pts):
-            p1.rotate_over_point(rotate_point_left, self.wheels_angle, self.which_side_turn)
-            p2.rotate_over_point(rotate_point_right, self.wheels_angle, self.which_side_turn)
+            p1.rotate_over_point(rotate_point_left, self.wheels_angle, self.cur_turn_side)
+            p2.rotate_over_point(rotate_point_right, self.wheels_angle, self.cur_turn_side)
 
         pygame.draw.polygon(self.screen, "#262626", [(p.x, p.y) for p in wheel_left_pts])
         pygame.draw.polygon(self.screen, "#262626", [(p.x, p.y) for p in wheel_right_pts])   
@@ -166,9 +166,9 @@ class CarDrafter:
 
         pygame.draw.polygon(self.screen, self.color, [(p.x, p.y) for p in pts])
 
-    def draw(self, corners, wheels_angle, which_side_turn, screen):
+    def draw(self, corners, wheels_angle, cur_turn_side, screen):
         self.wheels_angle = wheels_angle
-        self.which_side_turn = which_side_turn
+        self.cur_turn_side = cur_turn_side
         self.rear_left, self.rear_right, self.front_right, self.front_left = corners
         self.screen = screen
 
