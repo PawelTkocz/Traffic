@@ -99,7 +99,7 @@ class Car:
                 self.wheels.make_straight()
 
     def get_corners_list(self):
-        return [self.rear_left, self.rear_right, self.front_right, self.front_left]
+        return [self.rect.rear_left, self.rect.rear_right, self.rect.front_right, self.rect.front_left]
 
     def draw(self, screen):
         corners = self.get_corners_list()
