@@ -5,7 +5,7 @@ I tried to make the motion of my cars look realistic. Currently, there are two p
 ### 1. ParkingDemo
 The program shows a short animation of parallel parking. It's not interactive - just sit and enjoy
 
-## 2. ParkingGame
+### 2. ParkingGame
 The program gives You a chance to try to park a car by Yourself. To control the car, You can use the keys:  
 Up arrow - speed up  
 Left arrow - turn left  
