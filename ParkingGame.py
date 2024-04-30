@@ -4,6 +4,7 @@ import BackgroundDrafter
 import math
 from sys import exit
 
+from CarDrafter import tuples_list
 from Geometry import Point, Vector
 
 class ParkingGame:
@@ -15,9 +16,18 @@ class ParkingGame:
         self.car_width = 200
         offset_x = (self.screen_width - 3.5 * self.car_length) // 2
         offset_y = self.screen_height - 1.5 * self.car_width
-        self.c1 = self.car_factory.get_car(self.car_width, self.car_length, Point(offset_x + self.car_length, offset_y), Vector(1, 0), math.pi / 3, color="#4287f5")
-        self.c2 = self.car_factory.get_car(self.car_width, self.car_length, Point(offset_x + 3.5 * self.car_length, offset_y), Vector(1, 0), math.pi / 3, color="#e8e531")
-        self.c3 = self.car_factory.get_car(self.car_width, self.car_length, Point(1.5 * self.car_length, 243), Vector(1, 0), math.pi / 3, color="#b82f11")
+        self.wheel_max_angle = math.pi / 3
+
+        self.c1 = self.car_factory.get_car(self.car_width, self.car_length, 
+                                            Point(offset_x + self.car_length, offset_y),
+                                            Vector(1, 0), self.wheel_max_angle, color="#4287f5")
+        self.c2 = self.car_factory.get_car(self.car_width, self.car_length, 
+                                            Point(offset_x + 3.5 * self.car_length, offset_y), 
+                                            Vector(1, 0), self.wheel_max_angle, color="#e8e531")
+        self.c3 = self.car_factory.get_car(self.car_width, self.car_length, 
+                                            Point(1.5 * self.car_length, 243),
+                                            Vector(1, 0), self.wheel_max_angle, color="#b82f11")
+
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         self.screen_rect = pygame.Rect(0, 0, self.screen_width, self.screen_height)
         self.background_drafter = BackgroundDrafter.BackgroundDrafter(self.screen_width, self.screen_height)
@@ -35,7 +45,9 @@ class ParkingGame:
         self.c3.draw(self.screen)
 
     def restart(self):
-        self.c3 = self.car_factory.get_car(self.car_width, self.car_length, Point(1.5 * self.car_length, 243), Vector(Point(0, 0), Point(1, 0)), math.pi / 3, color="#b82f11")
+        self.c3 = self.car_factory.get_car(self.car_width, self.car_length, 
+                                            Point(1.5 * self.car_length, 243),
+                                            Vector(1, 0), self.wheel_max_angle, color="#b82f11")
         self.parking_spot_color = "#e60000"
 
     def turn_left(self):
@@ -54,10 +66,10 @@ class ParkingGame:
         self.c3.speed_up_reverse()
 
     def parking_succeeded(self):
-        return all([self.parking_spot.collidepoint(c) for c in [(p.x, p.y) for p in self.c3.corners.get_corners_list()]])
+        return all([self.parking_spot.collidepoint(c) for c in tuples_list(self.c3.get_corners_list())])
 
     def game_over(self):
-        if not all([self.screen_rect.collidepoint(c) for c in [(p.x, p.y) for p in self.c3.corners.get_corners_list()]]):
+        if not all([self.screen_rect.collidepoint(c) for c in tuples_list(self.c3.get_corners_list())]):
             return True
         if self.c3.collides_car(self.c1) or self.c3.collides_car(self.c2):
             return True
@@ -95,6 +107,7 @@ while True:
         game.brake()
     elif keys[pygame.K_DOWN]:
         game.speed_up_reverse()
+
     game.draw()
     game.next_frame()
     pygame.display.update()
