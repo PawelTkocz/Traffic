@@ -12,13 +12,24 @@ class ParkingDemo:
         self.car_factory = CarFactory.CarFactory()
         self.car_length = 360
         self.car_width = 200
+        self.wheel_max_angle = math.pi / 3
         offset_x = (self.screen_width - 3.5 * self.car_length) // 2
         offset_y = self.screen_height - 1.5 * self.car_width
-        self.c1 = self.car_factory.get_car(self.car_width, self.car_length, Point(offset_x + self.car_length, offset_y), Vector(1, 0), math.pi / 3, color="#4287f5")
-        self.c2 = self.car_factory.get_car(self.car_width, self.car_length, Point(offset_x + 3.5 * self.car_length, offset_y), Vector(1, 0), math.pi / 3, color="#e8e531")
-        self.c3 = self.car_factory.get_car(self.car_width, self.car_length, Point(-100, 243), Vector(1, 0), math.pi / 3, color="#b82f11")
-        self.c4 = self.car_factory.get_car(self.car_width, self.car_length, Point(-1000, -20), Vector(1, 0), math.pi / 3, color="#a10539")
-        self.c5 = self.car_factory.get_car(self.car_width, self.car_length, Point(-100, -20), Vector(1, 0), math.pi / 3, color="#47290f")
+        self.c1 = self.car_factory.get_car(self.car_width, self.car_length, 
+                                            Point(offset_x + self.car_length, offset_y),
+                                            Vector(1, 0), self.wheel_max_angle, color="#4287f5")
+        self.c2 = self.car_factory.get_car(self.car_width, self.car_length, 
+                                            Point(offset_x + 3.5 * self.car_length, offset_y), 
+                                            Vector(1, 0), self.wheel_max_angle, color="#e8e531")
+        self.c3 = self.car_factory.get_car(self.car_width, self.car_length, 
+                                            Point(-100, 243), 
+                                            Vector(1, 0), self.wheel_max_angle, color="#b82f11")
+        self.c4 = self.car_factory.get_car(self.car_width, self.car_length, 
+                                            Point(-1000, -20), 
+                                            Vector(1, 0), self.wheel_max_angle, color="#a10539")
+        self.c5 = self.car_factory.get_car(self.car_width, self.car_length,
+                                            Point(-100, -20), 
+                                            Vector(1, 0), self.wheel_max_angle, color="#47290f")
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         self.cur_phase = 0
         self.phases = [self.phase_zero, self.phase_one, self.phase_two, self.phase_three, 
@@ -37,7 +48,7 @@ class ParkingDemo:
     def phase_zero(self):
         self.c4.speed_up_front()
         self.c3.speed_up_front(5)
-        if self.c3.front_left_pos().x > self.c2.front_left_pos().x - self.car_length / 3:
+        if self.c3.front_left.x > self.c2.front_left.x - self.car_length / 3:
             self.cur_phase += 1
 
     def phase_one(self):
@@ -52,7 +63,7 @@ class ParkingDemo:
 
     def phase_three(self):
         self.c3.speed_up_reverse(-3)
-        if self.c3.rear_right_pos().y > 500:
+        if self.c3.rear_right.y > 500:
             self.cur_phase += 1
     
     def phase_four(self):
@@ -63,7 +74,7 @@ class ParkingDemo:
 
     def phase_five(self):
         self.c3.speed_up_reverse(-2)
-        if self.c3.rear_left_pos().y > self.c1.front_left_pos().y - 80:
+        if self.c3.rear_left.y > self.c1.front_left.y - 80:
             self.cur_phase += 1
 
     def phase_six(self):
@@ -74,11 +85,10 @@ class ParkingDemo:
 
     def phase_seven(self):
         self.c3.speed_up_reverse(-2)
-        if self.c3.rear_left_pos().x > self.c3.rear_right_pos().x - 7:
+        if self.c3.rear_left.x > self.c3.rear_right.x - 7:
             self.cur_phase += 1
 
     def phase_eight(self):
-        #tu pojawia sie roznica
         self.c3.brake()
         self.c3.straighten_wheels()
         if self.c3.wheels.are_straight():
@@ -86,7 +96,7 @@ class ParkingDemo:
 
     def phase_nine(self):
         self.c3.speed_up_front(2)
-        if self.c3.rear_left_pos().x > self.screen_width /2 - self.car_length / 2 - 20:
+        if self.c3.rear_left.x > self.screen_width /2 - self.car_length / 2 - 20:
             self.cur_phase += 1
 
     def phase_ten(self):
@@ -98,9 +108,15 @@ class ParkingDemo:
     def restart(self):
         self.time_cnt -= 1
         if self.time_cnt == 0:
-            self.c3 = self.car_factory.get_car(self.car_width, self.car_length, Point(-100, 243), Vector(1, 0), math.pi / 3, color="#b82f11")
-            self.c4 = self.car_factory.get_car(self.car_width, self.car_length, Point(-1000, -20), Vector(1, 0), math.pi / 3, color="#a10539")
-            self.c5 = self.car_factory.get_car(self.car_width, self.car_length, Point(-100, -20), Vector(1, 0), math.pi / 3, color="#47290f")
+            self.c3 = self.car_factory.get_car(self.car_width, self.car_length, 
+                                                Point(-100, 243), 
+                                                Vector(1, 0), self.wheel_max_angle, color="#b82f11")
+            self.c4 = self.car_factory.get_car(self.car_width, self.car_length, 
+                                                Point(-1000, -20), 
+                                                Vector(1, 0), self.wheel_max_angle, color="#a10539")
+            self.c5 = self.car_factory.get_car(self.car_width, self.car_length,
+                                                Point(-100, -20), 
+                                                Vector(1, 0), self.wheel_max_angle, color="#47290f")
             self.cur_phase = 0
 
     def next_frame(self):
@@ -123,7 +139,6 @@ while True:
             pygame.quit()
             exit()
     demo.draw()
-
     demo.next_frame()
     pygame.display.update()
     clock.tick(60)
