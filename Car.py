@@ -27,6 +27,21 @@ class Car:
         self.vel = 0
         self.car_drafter = CarDrafter(width, length, color)
 
+    @property
+    def front_left(self):
+        return self.rect.front_left
+    
+    @property
+    def front_right(self):
+        return self.rect.front_right
+    
+    @property
+    def rear_left(self):
+        return self.rect.rear_left
+    
+    @property
+    def rear_right(self):
+        return self.rect.rear_right
 
     def speed_up_front(self, limit=None):
         if self.vel >= 0:
@@ -84,7 +99,7 @@ class Car:
                 self.wheels.make_straight()
 
     def get_corners_list(self):
-        return [self.rect.rear_left, self.rect.rear_right, self.rect.front_right, self.rect.front_left]
+        return [self.rear_left, self.rear_right, self.front_right, self.front_left]
 
     def draw(self, screen):
         corners = self.get_corners_list()
