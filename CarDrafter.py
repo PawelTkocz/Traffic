@@ -1,9 +1,12 @@
 import pygame
-
 from Geometry import Point, TurnDir, Vector
+
+def tuples_list(point_list):
+    return [(p.x, p.y) for p in point_list]
 
 class CarDrafter:
     """Class responsible for drawing car on the screen"""
+
     def __init__(self, width, length, color):
         self.width = width
         self.length = length
@@ -25,8 +28,8 @@ class CarDrafter:
         light_right_pts[2] = light_right_pts[1].add_vector(width_vec)
         light_right_pts[3] = self.front_right.add_vector(width_vec)
 
-        pygame.draw.polygon(self.screen, "yellow", [(p.x, p.y) for p in light_left_pts])
-        pygame.draw.polygon(self.screen, "yellow", [(p.x, p.y) for p in light_right_pts])
+        pygame.draw.polygon(self.screen, "yellow", tuples_list(light_left_pts))
+        pygame.draw.polygon(self.screen, "yellow", tuples_list(light_right_pts))
     
     def draw_wing_mirrors(self):
         mirror_left_pts = [Point(0, 0) for i in range(4)]
@@ -48,8 +51,8 @@ class CarDrafter:
         mirror_right_pts[2] = mirror_right_pts[1].add_vector(width_vec)
         mirror_right_pts[3] = mirror_right_pts[0].add_vector(width_vec)
 
-        pygame.draw.polygon(self.screen, "black", [(p.x, p.y) for p in mirror_left_pts])
-        pygame.draw.polygon(self.screen, "black", [(p.x, p.y) for p in mirror_right_pts])        
+        pygame.draw.polygon(self.screen, "black", tuples_list(mirror_left_pts))
+        pygame.draw.polygon(self.screen, "black", tuples_list(mirror_right_pts))        
 
     def draw_front_window(self):
         pts = [Point(0, 0) for i in range(4)]
@@ -67,7 +70,7 @@ class CarDrafter:
         width_vec = Vector(self.rear_left, self.front_left).orthogonal_vector(self.width // 2, TurnDir.RIGHT)
         pts[2] = pts[3].add_vector(width_vec)
 
-        pygame.draw.polygon(self.screen, "black", [(p.x, p.y) for p in pts])
+        pygame.draw.polygon(self.screen, "black", tuples_list(pts))
 
     def draw_side_windows(self):
         pts_left = [Point(0, 0) for i in range(4)]
@@ -95,8 +98,8 @@ class CarDrafter:
         pts_left[3] = pts_left[0].add_vector(length_vec)
         pts_right[3] = pts_right[0].add_vector(length_vec)        
 
-        pygame.draw.polygon(self.screen, "black", [(p.x, p.y) for p in pts_left])
-        pygame.draw.polygon(self.screen, "black", [(p.x, p.y) for p in pts_right])
+        pygame.draw.polygon(self.screen, "black", tuples_list(pts_left))
+        pygame.draw.polygon(self.screen, "black", tuples_list(pts_right))
 
     def draw_back_window(self):
         pts = [Point(0, 0) for i in range(4)]
@@ -115,7 +118,7 @@ class CarDrafter:
         width_vec = Vector(self.rear_left, self.front_left).orthogonal_vector(self.width // 4, TurnDir.RIGHT)
         pts[2] = pts[3].add_vector(width_vec)
 
-        pygame.draw.polygon(self.screen, "black", [(p.x, p.y) for p in pts])
+        pygame.draw.polygon(self.screen, "black", tuples_list(pts))
 
     def draw_wheels(self):
         wheel_left_pts = [Point(0, 0) for i in range(4)]
@@ -146,8 +149,8 @@ class CarDrafter:
             p1.rotate_over_point(rotate_point_left, self.wheels_angle, self.cur_turn_side)
             p2.rotate_over_point(rotate_point_right, self.wheels_angle, self.cur_turn_side)
 
-        pygame.draw.polygon(self.screen, "#262626", [(p.x, p.y) for p in wheel_left_pts])
-        pygame.draw.polygon(self.screen, "#262626", [(p.x, p.y) for p in wheel_right_pts])   
+        pygame.draw.polygon(self.screen, "#262626", tuples_list(wheel_left_pts))
+        pygame.draw.polygon(self.screen, "#262626", tuples_list(wheel_right_pts))   
 
     def draw_inside(self):
         pts = [Point(0, 0) for i in range(4)]
@@ -164,7 +167,7 @@ class CarDrafter:
         pts[2] = pts[1].add_vector(width_vec)
         pts[3] = pts[0].add_vector(width_vec)
 
-        pygame.draw.polygon(self.screen, self.color, [(p.x, p.y) for p in pts])
+        pygame.draw.polygon(self.screen, self.color, tuples_list(pts))
 
     def draw(self, corners, wheels_angle, cur_turn_side, screen):
         self.wheels_angle = wheels_angle
@@ -173,7 +176,7 @@ class CarDrafter:
         self.screen = screen
 
         self.draw_wheels()
-        pygame.draw.polygon(screen, "black", [(p.x, p.y) for p in corners])
+        pygame.draw.polygon(screen, "black", tuples_list(corners))
         self.draw_inside()
         self.draw_lights()
         self.draw_wing_mirrors()
