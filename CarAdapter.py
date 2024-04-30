@@ -1,8 +1,6 @@
 import Car
 from Geometry import Point, Rectangle, TurnDir, Vector
 
-#do zmiany cztery ostatnie funkcie
-
 class CarAdapter(Car.Car):
     """Class makes the control over the Car natural for pygame screen's coordinate system"""
 
@@ -30,14 +28,19 @@ class CarAdapter(Car.Car):
             if self.cur_turn_side() == TurnDir.RIGHT:
                 self.wheels.make_straight()
 
-    def front_left_pos(self):
+
+    @property
+    def front_left(self):
         return self.rect.front_right
     
-    def front_right_pos(self):
+    @property
+    def front_right(self):
         return self.rect.front_left
     
-    def rear_left_pos(self):
+    @property
+    def rear_left(self):
         return self.rect.rear_right
     
-    def rear_right_pos(self):
+    @property
+    def rear_right(self):
         return self.rect.rear_left
