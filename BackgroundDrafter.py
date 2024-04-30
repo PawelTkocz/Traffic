@@ -28,10 +28,13 @@ class BackgroundDrafter:
     def draw_side_line(self):
         self.draw_dashed_line(100, 50, 100, self.screen_height - self.parking_width - self.pavement_width)      
 
+    def draw_pavement(self):
+        pygame.draw.rect(self.screen, self.pavement_color, 
+                                pygame.Rect(0, self.screen_height-self.pavement_width, self.screen_width, self.pavement_width))
+
     def draw(self, screen):
         self.screen = screen
         self.screen.fill(self.street_color)
-        pygame.draw.rect(self.screen, self.pavement_color, 
-                         pygame.Rect(0, self.screen_height-self.pavement_width, self.screen_width, self.pavement_width))
+        self.draw_pavement()
         self.draw_side_line()
         self.draw_center_line()
