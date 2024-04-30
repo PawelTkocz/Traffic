@@ -21,7 +21,7 @@ class CarAdapter(Car.Car):
         self.wheels.turn(self.turning_speed, TurnDir.LEFT)
 
     def straighten_wheels(self):
-        if self.which_side_turn == TurnDir.RIGHT:
+        if self.which_side_turn() == TurnDir.RIGHT:
             self.turn_right()
             if not self.which_side_turn() == TurnDir.RIGHT:
                 self.wheels.make_straight()
@@ -31,13 +31,13 @@ class CarAdapter(Car.Car):
                 self.wheels.make_straight()
 
     def front_left_pos(self):
-        return self.corners.front_right[:]
+        return self.corners.front_right
     
     def front_right_pos(self):
-        return self.corners.front_left[:]
+        return self.corners.front_left
     
     def rear_left_pos(self):
-        return self.corners.rear_right[:]
+        return self.corners.rear_right
     
     def rear_right_pos(self):
-        return self.corners.rear_left[:]
+        return self.corners.rear_left

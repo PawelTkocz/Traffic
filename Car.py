@@ -97,8 +97,7 @@ class Car:
                      - math.sqrt(self.length**2 - self.vel**2 * self.wheels.sin_cur_angle()**2)
                      + self.vel * self.wheels.cos_cur_angle())
         rear_movement_vec = self.direction.scale_to_len(rear_vel, True)
-
-        if self.which_side_turn == TurnDir.RIGHT:
+        if self.which_side_turn() == TurnDir.RIGHT:
             self.direction = self.corners.move_right_side(front_movement_vec, rear_movement_vec)
         else:
             self.direction = self.corners.move_left_side(front_movement_vec, rear_movement_vec)
